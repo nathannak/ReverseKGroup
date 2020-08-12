@@ -27,24 +27,31 @@ public class Main {
 
         ListNode dmy = new ListNode(0);
         dmy.next = head;
+
+        //prev inits to dmy
+        //tail inits to head
         for(ListNode prev = dmy, tail = head;      n >= k;     n -= k) {
+
             for (int i = 1; i < k; i++) {
 
                 //store tail.next.next -> 20
                 ListNode next = tail.next.next;
-                //replace 20 with 1, now 3 points to 1
+                //replace 20 with 1, now 3 points to 1 [we have 1 -> 3 -> 1 -> 9 -> ...]
                 tail.next.next = prev.next;
 
-                // all we have to do now is to pull 3->1 back to prev.next [3 is tail.next]
+                //all we have to do now is to pull 3->1 'back' to prev.next/dmy.next [3 is tail.next]
+                //to get 0->3->1->9->... [in fact it's not 9 it's 0->3->1->3 there is a cycle]
                 prev.next = tail.next;
 
                 //now that we have prev -> 3 -> 1, make tail.next [1.next] point to next[20] that we stored earlier
+                //to get 0->3->1->20->9
                 tail.next = next;
             }
 
             //after done; push prev and tail one node ahead, prev always points to previous tail
             prev = tail;
             tail = tail.next;
+
         }
         return dmy.next;
     }
